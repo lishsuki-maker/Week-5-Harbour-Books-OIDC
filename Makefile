@@ -1,5 +1,8 @@
 SHELL := /bin/bash
 
+DOCKER_IMAGE_NAME ?= 650694420923.dkr.ecr.ap-southeast-2.amazonaws.com/harbour-books-oidc
+TAG ?= local
+
 lint:
 	docker run --rm -i hadolint/hadolint < Dockerfile || true
 
