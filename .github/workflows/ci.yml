@@ -10,9 +10,6 @@ jobs:
   deploy-dev:
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
-    permissions:
-      contents: read
-      id-token: write
     with:
       environment: dev
     secrets:
@@ -21,9 +18,6 @@ jobs:
   deploy-qa:
     if: github.ref == 'refs/heads/qa'
     uses: ./.github/workflows/deploy.yml
-    permissions:
-      contents: read
-      id-token: write
     with:
       environment: qa
     secrets:
