@@ -1,0 +1,42 @@
+name: Reusable Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+    secrets:
+      aws-role-arn:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws-role-arn }}
+          aws-region: ap-southeast-2
+
+      - name: Build
+        run: make build
+
+      - name: Push
+        run: make push
+
+      - name: Pull and Restart
+        run: |
+          aws ssm send-command \
+            --instance-ids "i-00b3db2564f4d53dc" \
+            --document-name "AWS-RunShellScript" \
+            --parameters 'commands=["docker pull 650694420923.dkr.ecr.ap-southeast-2.amazonaws.com/harbour-books-oidc:local","docker restart Harbour_Books_OIDC"]'
