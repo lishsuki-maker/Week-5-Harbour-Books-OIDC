@@ -1,0 +1,6 @@
+services:
+  app:
+    container_name: Harbour_Books_OIDC
+    image: "${DOCKER_IMAGE_NAME:-Harbour_Books_OIDC}:${TAG:-local}"
+    ports:
+      - "127.0.0.1:5000:5000"
